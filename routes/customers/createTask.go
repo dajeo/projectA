@@ -1,6 +1,7 @@
 package customers
 
 import (
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -11,8 +12,9 @@ import (
 // @Description do ping
 // @Tags Customers
 // @Router /customers/create_task [get]
-func CreateTask(context *gin.Context) {
-	context.JSON(http.StatusOK, gin.H{
-		"a": 1,
+func CreateTask(c *gin.Context) {
+	claims := jwt.ExtractClaims(c)
+	c.JSON(http.StatusOK, gin.H{
+		"tel": claims["tel"],
 	})
 }
