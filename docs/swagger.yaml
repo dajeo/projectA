@@ -1,0 +1,11 @@
+info:
+  contact: {}
+paths:
+  /customers/create_task:
+    get:
+      description: do ping
+      responses: {}
+      summary: Create task
+      tags:
+      - Customers
+swagger: "2.0"
