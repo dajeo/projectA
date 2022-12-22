@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	files "github.com/swaggo/files"
 	swagger "github.com/swaggo/gin-swagger"
+	"golang.org/x/crypto/bcrypt"
 	"projectA/docs"
 	"projectA/gateway"
 	"projectA/models"
@@ -42,11 +43,11 @@ func main() {
 		Key:         []byte("secret"), // todo: generate secret key
 		Timeout:     time.Hour * 24 * 30,
 		MaxRefresh:  time.Hour,
-		IdentityKey: "tel",
+		IdentityKey: "id",
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*models.UserRes); ok {
 				return jwt.MapClaims{
-					"tel": v.Tel,
+					"id": v.ID,
 				}
 			}
 			return jwt.MapClaims{}
@@ -54,7 +55,7 @@ func main() {
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
 			return &models.UserRes{
-				Tel: claims["tel"].(string),
+				ID: claims["id"].(uint),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -66,7 +67,10 @@ func main() {
 			userTel := loginVals.Tel
 			userPass := loginVals.Password
 
-			if userTel == "908" && userPass == "admin" {
+			var user models.User
+			utils.Db.Model(models.User{Tel: userTel}).First(&user)
+
+			if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userPass)) == nil {
 				return &models.UserRes{
 					Tel: userTel,
 				}, nil
@@ -75,7 +79,7 @@ func main() {
 			return nil, jwt.ErrFailedAuthentication
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
-			if v, ok := data.(*models.UserRes); ok && v.Tel == "908" {
+			if _, ok := data.(*models.UserRes); ok {
 				return true
 			}
 
