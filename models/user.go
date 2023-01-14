@@ -23,5 +23,4 @@ type User struct {
 	Email      string
 	Password   string
 	OrgId      uint
-	Org        Org `gorm:"foreignKey:OrgId"`
 }

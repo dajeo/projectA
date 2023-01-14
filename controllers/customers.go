@@ -1,4 +1,4 @@
-package customers
+package controllers
 
 import (
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -6,15 +6,17 @@ import (
 	"net/http"
 )
 
+type CustomersController struct{}
+
 // CreateTask godoc
 // @Summary Create task
 // @Schemes
 // @Description do ping
 // @Tags Customers
 // @Router /customers/create_task [get]
-func CreateTask(c *gin.Context) {
+func (controller CustomersController) CreateTask(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	c.JSON(http.StatusOK, gin.H{
-		"tel": claims["tel"],
+		"id": claims["id"],
 	})
 }
