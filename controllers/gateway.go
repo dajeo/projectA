@@ -14,19 +14,6 @@ import (
 
 type GatewayController struct{}
 
-type Event struct {
-	Type string      `json:"t"`
-	Data interface{} `json:"d"`
-}
-
-type Authorization struct {
-	Token string `json:"token"`
-}
-
-type Authenticated struct {
-	IsAuthenticated bool `json:"isAuthenticated"`
-}
-
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		return true
@@ -34,7 +21,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func sendError(ws *websocket.Conn) {
-	err := ws.WriteJSON(Authenticated{
+	err := ws.WriteJSON(models.Authenticated{
 		IsAuthenticated: false,
 	})
 	if err != nil {
@@ -57,7 +44,7 @@ func (controller GatewayController) Handler(c *gin.Context) {
 			return
 		}
 
-		var auth Authorization
+		var auth models.Authorization
 
 		if err := json.Unmarshal(message, &auth); err != nil {
 			sendError(ws)
@@ -74,7 +61,7 @@ func (controller GatewayController) Handler(c *gin.Context) {
 
 		db.GetDB().First(&user, userId["id"])
 
-		err = ws.WriteJSON(Authenticated{
+		err = ws.WriteJSON(models.Authenticated{
 			IsAuthenticated: true,
 		})
 		if err != nil {
@@ -108,7 +95,7 @@ func (controller GatewayController) Handler(c *gin.Context) {
 
 	go func() {
 		for msg := range channel {
-			var raw Event
+			var raw models.Event
 
 			if err := json.Unmarshal([]byte(msg.Payload), &raw); err != nil {
 				fmt.Println(err)
