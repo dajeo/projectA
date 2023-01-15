@@ -1,19 +1,19 @@
 package server
 
 import (
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	files "github.com/swaggo/files"
 	swagger "github.com/swaggo/gin-swagger"
 	"projectA/controllers"
+	"projectA/middlewares"
 )
 
-func NewRouter(authMiddleware *jwt.GinJWTMiddleware) *gin.Engine {
+func NewRouter() *gin.Engine {
 	r := gin.Default()
 
 	customersController := new(controllers.CustomersController)
 	gatewayController := new(controllers.GatewayController)
-	gatewayController.Auth = authMiddleware
+	authMiddleware := middlewares.GetJWT()
 
 	authGroup := r.Group("/auth")
 	{

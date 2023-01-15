@@ -9,12 +9,11 @@ import (
 	"github.com/gorilla/websocket"
 	"net/http"
 	"projectA/db"
+	"projectA/middlewares"
 	"projectA/models"
 )
 
-type GatewayController struct {
-	Auth *jwt.GinJWTMiddleware
-}
+type GatewayController struct{}
 
 type Event struct {
 	Type string      `json:"t"`
@@ -52,6 +51,7 @@ func (controller GatewayController) Handle(c *gin.Context) {
 	}
 
 	var user models.User
+	authMiddleware := middlewares.GetJWT()
 
 	for {
 		_, message, err := ws.ReadMessage()
@@ -66,7 +66,7 @@ func (controller GatewayController) Handle(c *gin.Context) {
 			continue
 		}
 
-		token, err := controller.Auth.ParseTokenString(auth.Token)
+		token, err := authMiddleware.ParseTokenString(auth.Token)
 		if err != nil {
 			sendError(ws)
 			continue

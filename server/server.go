@@ -1,12 +1,12 @@
 package server
 
 import (
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-contrib/cors"
+	"projectA/config"
 )
 
-func Init(authMiddleware *jwt.GinJWTMiddleware) {
-	r := NewRouter(authMiddleware)
+func Init() {
+	r := NewRouter()
 
 	// See this before deploy to production
 	// https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies
@@ -17,7 +17,7 @@ func Init(authMiddleware *jwt.GinJWTMiddleware) {
 
 	r.Use(cors.Default()) // Configure before production
 
-	err := r.Run(":8000")
+	err := r.Run(":" + config.GetConfig().GetString("server.port"))
 	if err != nil {
 		return
 	}

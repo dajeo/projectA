@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
+	"projectA/config"
 	"projectA/db"
 	"projectA/docs"
 	"projectA/middlewares"
@@ -11,15 +11,12 @@ import (
 func main() {
 	docs.SwaggerInfo.BasePath = "/"
 
-	envErr := godotenv.Load()
-	if envErr != nil {
-		return
-	}
+	config.Init("dev")
 
 	db.InitDB()
 	db.InitRedis()
 
-	auth := middlewares.InitJWTMiddleware()
+	middlewares.InitJWT()
 
-	server.Init(auth)
+	server.Init()
 }

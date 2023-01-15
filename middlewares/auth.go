@@ -4,16 +4,20 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	"os"
+	"projectA/config"
 	"projectA/db"
 	"projectA/models"
 	"time"
 )
 
-func InitJWTMiddleware() *jwt.GinJWTMiddleware {
-	auth, authErr := jwt.New(&jwt.GinJWTMiddleware{
+var auth *jwt.GinJWTMiddleware
+
+func InitJWT() {
+	c := config.GetConfig()
+	var authErr error
+	auth, authErr = jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "zone",
-		Key:         []byte(os.Getenv("SECRET_KEY")),
+		Key:         []byte(c.GetString("auth.secret_key")),
 		Timeout:     time.Hour * 24 * 30,
 		MaxRefresh:  time.Hour,
 		IdentityKey: "id",
@@ -74,13 +78,15 @@ func InitJWTMiddleware() *jwt.GinJWTMiddleware {
 		TimeFunc:      time.Now,
 	})
 	if authErr != nil {
-		return nil
+		return
 	}
 
 	authErrInit := auth.MiddlewareInit()
 	if authErrInit != nil {
-		return nil
+		return
 	}
+}
 
+func GetJWT() *jwt.GinJWTMiddleware {
 	return auth
 }

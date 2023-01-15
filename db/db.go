@@ -1,8 +1,7 @@
 package db
 
 import (
-	"fmt"
-	"os"
+	"projectA/config"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -10,12 +9,14 @@ import (
 
 var db *gorm.DB
 
-func e(key string) string {
-	return os.Getenv("PG_" + key)
-}
-
 func InitDB() {
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=require options=project=ep-floral-haze-264573", e("HOST"), e("USER"), e("PASS"), e("NAME"))
+	c := config.GetConfig()
+	dsn := "host=" + c.GetString("pg.host") +
+		" user=" + c.GetString("pg.user") +
+		" password=" + c.GetString("pg.pass") +
+		" dbname=" + c.GetString("pg.name") +
+		" sslmode=require" +
+		" options=project=ep-floral-haze-264573"
 	var err error
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
