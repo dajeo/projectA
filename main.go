@@ -11,7 +11,7 @@ import (
 func main() {
 	docs.SwaggerInfo.BasePath = "/"
 
-	config.Init("dev")
+	config.Init("development")
 
 	db.InitDB()
 	db.InitRedis()

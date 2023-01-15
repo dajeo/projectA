@@ -1,6 +1,7 @@
 package db
 
 import (
+	"log"
 	"projectA/config"
 
 	"gorm.io/driver/postgres"
@@ -20,7 +21,7 @@ func InitDB() {
 	var err error
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return
+		log.Fatal("error on initializing database: ", err)
 	}
 }
 

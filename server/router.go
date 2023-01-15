@@ -29,7 +29,7 @@ func NewRouter() *gin.Engine {
 		}
 	}
 
-	r.GET("/gateway", gatewayController.Handle)
+	r.GET("/gateway", gatewayController.Handler)
 
 	r.GET("/swagger/*any", swagger.WrapHandler(files.Handler))
 

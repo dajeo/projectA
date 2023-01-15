@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -28,7 +27,6 @@ type Authenticated struct {
 	IsAuthenticated bool `json:"isAuthenticated"`
 }
 
-var ctx = context.Background()
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		return true
@@ -44,7 +42,7 @@ func sendError(ws *websocket.Conn) {
 	}
 }
 
-func (controller GatewayController) Handle(c *gin.Context) {
+func (controller GatewayController) Handler(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		fmt.Println(err)
@@ -87,7 +85,7 @@ func (controller GatewayController) Handle(c *gin.Context) {
 		break
 	}
 
-	pubsub := db.GetRedis().Subscribe(ctx, "ch1")
+	pubsub := db.GetRedis().Subscribe(db.GetContext(), "ch1")
 	channel := pubsub.Channel()
 
 	go func() {

@@ -6,7 +6,7 @@ var config *viper.Viper
 
 func Init(configName string) {
 	config = viper.New()
-	config.SetConfigType("yml")
+	config.SetConfigType("toml")
 	config.SetConfigName(configName)
 	config.AddConfigPath("../config/")
 	config.AddConfigPath("config/")
