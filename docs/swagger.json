@@ -1,0 +1,18 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/customers/create_task": {
+            "get": {
+                "description": "do ping",
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Create task",
+                "responses": {}
+            }
+        }
+    }
+}

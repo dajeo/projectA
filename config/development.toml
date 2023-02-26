@@ -1,0 +1,15 @@
+[pg]
+host = "hostname"
+name = "database"
+user = "username"
+pass = "password"
+
+[redis]
+host = "hostname"
+pass = "password"
+
+[auth]
+secret_key = "secret key"
+
+[server]
+port = 8000
