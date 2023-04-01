@@ -9,7 +9,7 @@ require (
 	github.com/go-redis/redis/v9 v9.0.0-rc.2
 	github.com/gorilla/websocket v1.5.0
 	github.com/spf13/viper v1.14.0
-	github.com/swaggo/files v1.0.0
+	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.8
 	golang.org/x/crypto v0.4.0
